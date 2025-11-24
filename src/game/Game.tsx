@@ -15,7 +15,7 @@ function Game() {
 
     useEffect(() => {
         const temp = [ ...spheres];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 300; i++) {
             temp.push(
                 <Sphere
                     key={amountSphere.current}
@@ -28,7 +28,6 @@ function Game() {
     }, []);
 
     const generateNewHeightMap = () => {
-        console.log('works');
         setHeightMap(generateHeightMap());
     };
 

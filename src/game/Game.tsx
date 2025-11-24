@@ -14,10 +14,8 @@ function Game() {
     const amountSphere = useRef(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (amountSphere.current == 20) return;
-
-            const temp = [ ...spheres];
+        const temp = [ ...spheres];
+        for (let i = 0; i < 100; i++) {
             temp.push(
                 <Sphere
                     key={amountSphere.current}
@@ -25,15 +23,9 @@ function Game() {
                     heightMap={heightMap}
                 />
             )
-
-            setSpheres(temp);
-            amountSphere.current++;
-        }, 100);
-
-        return () => {
-            clearInterval(interval);
         }
-    }, [spheres]);
+        setSpheres(temp);
+    }, []);
 
     const generateNewHeightMap = () => {
         console.log('works');

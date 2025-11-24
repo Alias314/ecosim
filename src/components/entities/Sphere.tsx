@@ -1,7 +1,7 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
-import { Vector3, Mesh, Raycaster } from "three";
+import { Vector3, Mesh, Raycaster, MathUtils } from "three";
 import { useGameStore } from "../../game/store";
 
 interface SphereProps {
@@ -12,42 +12,59 @@ function Sphere({ terrainRef, heightMap }: SphereProps) {
     const terrainSize = useGameStore((state) => state.terrainSize);
 
     const bodyRef = useRef<RapierRigidBody | null>(null);
-    const meshRef = useRef<Mesh | null>(null);
     const newPos = new Vector3();
     const time = useRef(0);
-    const raycaster = new Raycaster();
-    const rayDirection = new Vector3(0, -1, 0);
-    const rayOrigin = new Vector3();
-    const radius = 2.5;
+    const speed = 0.1;
+    const direction = useRef({x: 0, z: 0});
 
     useFrame((_, delta) => {
-        if (!bodyRef.current || !terrainRef.current || !meshRef.current) return;
+        if (!bodyRef.current || !terrainRef.current) return;
 
-        time.current += delta;
+        time.current += delta * speed;
 
-        const bodyPos = bodyRef.current.translation();
-        const newX = Math.sin(time.current) * radius;
-        const newZ = Math.cos(time.current) * radius;
+        const bodyPos = bodyRef.current.translation();        
+        const indexX = Math.floor(terrainSize / 10 * bodyPos.x);
+        const indexZ = Math.floor(terrainSize / 10 * bodyPos.z);
+        const nextY = heightMap[indexZ][indexX] < 0.4 ? 0.4 : heightMap[indexZ][indexX];
         
-        const currentX = bodyPos.x;
-        const currentY = bodyPos.z;
-        const indexX = Math.floor(terrainSize / 10 * currentX);
-        const indexY = Math.floor(terrainSize / 10 * currentY);
-        const newY = heightMap[indexY][indexX];
+        let nextX = bodyPos.x + direction.current.x * 10;
+        let nextZ = bodyPos.z + direction.current.z * 10;
+
+        if (nextX < 0) nextX = 0.01;
+        if (nextX > 10) nextX = 9.99;
+        if (nextZ < 0) nextZ = 0;
+        if (nextZ > 10) nextZ = 9.99;
 
         newPos.set(
-            newX + 5,
-            newY * 4 + 0.5,
-            newZ + 5,
+            nextX,
+            nextY * 4 + 0.1,
+            nextZ
         )
-        
+
         bodyRef.current?.setNextKinematicTranslation(newPos);
     });
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const radian = MathUtils.degToRad(Math.random() * 360);
+            direction.current.x = Math.cos(radian) / 100;
+            direction.current.z = Math.sin(radian) / 100;
+        }, 100);
+
+        return () => {
+            clearInterval(interval);
+        }
+    }, []);
+
     return (
-        <RigidBody ref={bodyRef} type="kinematicPosition" colliders="ball">
-            <mesh ref={meshRef} position={[0, 0, 0]}>
-                <icosahedronGeometry args={[0.5, 2]} />
+        <RigidBody 
+            ref={bodyRef}
+            position={[5, 0, 5]} 
+            type="kinematicPosition" 
+            colliders="ball"
+        >
+            <mesh position={[0, 0, 0]}>
+                <icosahedronGeometry args={[0.1, 2]} />
                 <meshStandardMaterial color={'red'} />
             </mesh>
         </RigidBody>

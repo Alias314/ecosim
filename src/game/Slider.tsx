@@ -35,6 +35,7 @@ function Slider({
     const generateRandomSeed = () => {
         const newSeed = Math.floor(Math.random() * 100000);
         setValue('noiseSeed', newSeed);
+        
     }
 
     return (

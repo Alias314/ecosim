@@ -20,7 +20,7 @@ const useEntityMovement = (
   const terrainSize = useGameStore((state) => state.terrainSize);
   const terrainHeight = useGameStore((state) => state.terrainHeight);
   const direction = useGetNewDirection(200);
-  const delay = useStartDelay(0, 10000);
+  const delay = useStartDelay(0, 0);
   const nextPos = new Vector3();
 
   useFrame(() => {
@@ -42,7 +42,7 @@ const useEntityMovement = (
 
     const index = getTerrainIndex(nextPos, terrainSize);
     const nextY = Math.max(0.4, heightMap[index.z][index.x]);
-    if (isOnWater(nextY)) return;
+    // if (isOnWater(nextY)) return;
 
     nextPos.set(nextPos.x, nextY * terrainHeight + meshSize, nextPos.z);
     bodyRef.current.setNextKinematicTranslation(nextPos);

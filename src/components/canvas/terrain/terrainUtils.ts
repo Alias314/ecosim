@@ -3,12 +3,8 @@ import { Color } from "three";
 import { useGameStore } from "../../../game/store";
 
 const p = new p5((sketch) => {
-  const lod = useGameStore.getState().lod;
-  const falloff = useGameStore.getState().falloff;
-
   sketch.setup = () => {
     sketch.noCanvas();
-    sketch.noiseDetail(lod, falloff);
   };
 });
 
@@ -23,8 +19,11 @@ export function generateHeightMap() {
   const heightMapScale = useGameStore.getState().heightMapScale;
   const zoomScale = useGameStore.getState().zoomScale;
   const noiseSeed = useGameStore.getState().noiseSeed;
+  const lod = useGameStore.getState().lod;
+  const falloff = useGameStore.getState().falloff;
   
   const heightMap = new Array();
+  p.noiseDetail(lod, falloff);
   p.noiseSeed(noiseSeed);
 
   for (let i = 0; i < heightMapSize; i++) {

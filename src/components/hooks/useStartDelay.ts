@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { getRandomNumberAtRange } from '../../utils/math';
-import { MathUtils } from 'three';
 
 const useStartDelay = (minDelay: number, maxDelay: number) => {
   const isReady = useRef(false);

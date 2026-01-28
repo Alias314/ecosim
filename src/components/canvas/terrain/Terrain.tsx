@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { PlaneGeometry, Mesh, Color, BufferAttribute } from "three";
-import { getTerrainColor, terrainType } from "./terrainUtils";
-import Tree from "../entities/Tree";
+import { getTerrainColor } from "./terrainUtils";
 import { useGameStore } from "../../../game/store";
+import { terrainType } from "../../../constants/terrain";
 
 interface TerrainProps {
     terrainRef: React.RefObject<Mesh | null>;

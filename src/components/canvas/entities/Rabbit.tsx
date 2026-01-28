@@ -1,19 +1,9 @@
 import { useEffect, useRef } from "react";
 import {
   BallCollider,
-  MeshCollider,
   RapierRigidBody,
   RigidBody,
 } from "@react-three/rapier";
-import { useFrame } from "@react-three/fiber";
-import { Vector3, Mesh, MathUtils } from "three";
-import { useGameStore } from "../../../game/store";
-import useStartDelay from "../../hooks/useStartDelay";
-import { getDirection, getRandomRadian } from "../../../utils/math";
-import useGetNewDirection from "../../hooks/useGetNewDirection";
-import { handleOutOfBounds, isOnWater } from "../../../utils/canvas";
-import { getTerrainColor } from "../terrain/terrainUtils";
-import { getTerrainIndex } from "../../../utils/canvas";
 import useEntityMovement from "../../hooks/useEntityMovement";
 
 interface SphereProps {

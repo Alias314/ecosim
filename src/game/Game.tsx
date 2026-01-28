@@ -2,11 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { generateHeightMap } from "../components/terrain/terrainUtils";
-import Terrain from "../components/terrain/Terrain";
+import { generateHeightMap } from "../components/canvas/terrain/terrainUtils";
+import Terrain from "../components/canvas/terrain/Terrain";
 import GameSidebar from "./GameSidebar";
-import Rabbit from "../components/entities/Rabbit";
-import Wolf from "../components/entities/Wolf";
+import Rabbit from "../components/canvas/entities/Rabbit";
+import Wolf from "../components/canvas/entities/Wolf";
+import useSpawnEntity from "../components/hooks/useSpawnEntity";
 
 function Game() {
     const terrainRef = useRef(null);
@@ -16,26 +17,11 @@ function Game() {
     const rabbitStatusRef = useRef({});
     const rabbitPositionsRef = useRef({});
 
-    useEffect(() => {
-        const tempRabbits = [];
-        const tempWolves = [];
-
-        for (let i = 0; i < 200; i++) {
-            tempRabbits.push({ id: i });
-            rabbitStatusRef.current[i] = true;
-        }
-
-        for (let i = 0; i < 2; i++) {
-            tempWolves.push(i);
-        }
-
-        setRabbits(tempRabbits);
-        setWolves(tempWolves);
-    }, []);
-
     const generateNewHeightMap = () => {
         setHeightMap(generateHeightMap());
     };
+
+    useSpawnEntity(setRabbits, setWolves, rabbitStatusRef, rabbitPositionsRef);
 
     return (
         <div className="w-screen h-screen absolute flex items-start justify-start bg-neutral-100">

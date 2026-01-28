@@ -3,6 +3,7 @@ import { Vector3 } from "three";
 import { handleOutOfBounds } from "../../utils/canvas";
 import { getTerrainIndex, isOnWater } from "../../utils/canvas";
 import { useGameStore } from "../../game/store";
+import { boundary } from "../../constants/terrain";
 import useGetNewDirection from "./useGetNewDirection";
 import useStartDelay from "./useStartDelay";
 
@@ -21,11 +22,6 @@ const useEntityMovement = (
   const direction = useGetNewDirection(200);
   const delay = useStartDelay(0, 10000);
   const nextPos = new Vector3();
-
-  const boundary = {
-    x: { min: 0, max: 10 },
-    z: { min: 0, max: 10 },
-  };
 
   useFrame(() => {
     if (!bodyRef.current || !terrainRef.current || !delay.current) return;

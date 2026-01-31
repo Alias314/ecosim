@@ -12,6 +12,7 @@ interface SphereProps {
 
 function Rabbit({
   id,
+  position,
   rabbitStatusRef,
   rabbitPositionsRef,
   terrainRef,
@@ -33,7 +34,7 @@ function Rabbit({
   );
 
   return (
-    <RigidBody ref={bodyRef} position={[5, 0, 5]} type="kinematicPosition">
+    <RigidBody ref={bodyRef} position={position} type="kinematicPosition">
       <mesh position={[0, 0, 0]} visible={rabbitStatusRef.current[id]}>
         <icosahedronGeometry args={[meshSize, 2]} />
         <meshStandardMaterial color={"red"} />

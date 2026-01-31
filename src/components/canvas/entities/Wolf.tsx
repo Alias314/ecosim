@@ -17,7 +17,7 @@ function Wolf({
   const newPos = new Vector3(...position);
   const _wolfPos = new Vector3();
   const chaseDirection = new Vector3();
-  const speed = 1;
+  const speed = 0.05;
 
   useFrame(() => {
     if (!rigidBodyRef.current || !terrainRef.current) return;

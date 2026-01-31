@@ -14,3 +14,10 @@ export const getDirection = (radian) => {
     z: Math.sin(radian) / 100 
   };
 };
+
+export const getRandomCoordinate = (range) => {
+  const x = Math.random() * range;
+  const y = 0;
+  const z = Math.random() * range;
+  return [x, y, z];
+};

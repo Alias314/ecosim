@@ -3,11 +3,14 @@ import { MathUtils, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useGameStore } from "../../../game/store";
+import { boundary } from "../../../constants/terrain";
 
 function Wolf({
+  id,
   position,
   rabbitStatusRef,
   rabbitPositionsRef,
+  wolfPositionsRef,
   terrainRef,
   heightMap,
 }) {
@@ -18,16 +21,20 @@ function Wolf({
   const _wolfPos = new Vector3();
   const chaseDirection = new Vector3();
   const speed = 0.05;
+  const BOUNDARY_OFFSET = 0.011;
+
 
   useFrame(() => {
     if (!rigidBodyRef.current || !terrainRef.current) return;
 
-    _wolfPos.copy(newPos);
-    rigidBodyRef.current.setNextKinematicTranslation(newPos);
+    const bodyPos = rigidBodyRef.current.translation();
+    _wolfPos.set(bodyPos.x, bodyPos.y, bodyPos.z);
+    
 
     const rabbits = rabbitPositionsRef.current;
     const attackRange = 0.1;
-    let nearestRabbitId = null;
+    const attackRangeSq = attackRange * attackRange;
+    let nearestRabbitId: string | null = null;
     let minDistance = Infinity;
 
     for (const rabbitId in rabbits) {
@@ -41,33 +48,51 @@ function Wolf({
         minDistance = distanceSquared;
       }
 
-      if (distanceSquared < attackRange) {
+      if (distanceSquared < attackRangeSq) {
         rabbitStatusRef.current[rabbitId] = false;
         delete rabbitPositionsRef.current[rabbitId];
       }
     }
 
+    let nextX = bodyPos.x;
+    let nextZ = bodyPos.z;
+
     if (nearestRabbitId && rabbits[nearestRabbitId]) {
       chaseDirection.subVectors(rabbits[nearestRabbitId], _wolfPos).normalize();
 
-      const bodyPos = rigidBodyRef.current.translation();
-      let nextX = bodyPos.x + chaseDirection.x * speed;
-      let nextZ = bodyPos.z + chaseDirection.z * speed;
+
+      //boundary aware: avoids push owtward at edges
+      if(bodyPos.x <= boundary.x.min + BOUNDARY_OFFSET && chaseDirection.x < 0){
+        chaseDirection.x = Math.abs(chaseDirection.x);
+      }
+      if(bodyPos.x >= boundary.x.max - BOUNDARY_OFFSET && chaseDirection.x > 0){
+        chaseDirection.x = -Math.abs(chaseDirection.x);
+      }
+      if(bodyPos.z <= boundary.z.min + BOUNDARY_OFFSET && chaseDirection.z < 0){
+        chaseDirection.z = Math.abs(chaseDirection.z);
+      }
+      if(bodyPos.z >= boundary.z.max - BOUNDARY_OFFSET && chaseDirection.z > 0){
+        chaseDirection.z = -Math.abs(chaseDirection.z);
+      }
+
+
+      nextX = bodyPos.x + chaseDirection.x * speed;
+      nextZ = bodyPos.z + chaseDirection.z * speed;
 
       if (nextX < 0) nextX = 0.01;
       if (nextX > 10) nextX = 9.99;
       if (nextZ < 0) nextZ = 0;
       if (nextZ > 10) nextZ = 9.99;
 
-      const indexX = Math.floor((terrainSize / 10) * nextX);
-      const indexZ = Math.floor((terrainSize / 10) * nextZ);
-      const nextY =
-        heightMap[indexZ][indexX] < 0.4 ? 0.4 : heightMap[indexZ][indexX];
-      // if (nextY > 0.4) isOnWater.current = false;
-      // if (nextY <= 0.4 && !isOnWater.current) return;
-
-      newPos.set(nextX, nextY * 4 + 0.05, nextZ);
     }
+    const indexX = Math.floor((terrainSize / 10) * nextX);
+    const indexZ = Math.floor((terrainSize / 10) * nextZ);
+    const nextY = Math.max(0.4, heightMap[indexZ][indexX]);
+
+    newPos.set(nextX, nextY * 4 + 0.05, nextZ);
+
+    rigidBodyRef.current.setNextKinematicTranslation(newPos);
+    wolfPositionsRef.current[id] = newPos.clone();
   });
 
   return (

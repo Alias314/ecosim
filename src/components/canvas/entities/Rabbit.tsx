@@ -15,11 +15,12 @@ function Rabbit({
   position,
   rabbitStatusRef,
   rabbitPositionsRef,
+  wolfPositionsRef,
   terrainRef,
   heightMap,
 }: SphereProps) {
   const bodyRef = useRef<RapierRigidBody | null>(null);
-  const speed = 5;
+  const speed = 0.05;
   const meshSize = 0.05;
 
   useEntityMovement(
@@ -28,6 +29,7 @@ function Rabbit({
     terrainRef, 
     rabbitStatusRef, 
     rabbitPositionsRef, 
+    wolfPositionsRef,
     heightMap, 
     meshSize, 
     speed

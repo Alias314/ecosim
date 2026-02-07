@@ -16,6 +16,7 @@ function Game() {
   const [wolves, setWolves] = useState([]);
   const rabbitStatusRef = useRef({});
   const rabbitPositionsRef = useRef({});
+  const wolfPositionsRef = useRef({});
 
   const generateNewHeightMap = () => {
     setHeightMap(generateHeightMap());
@@ -40,6 +41,7 @@ function Game() {
               position={rabbit.position}
               rabbitStatusRef={rabbitStatusRef}
               rabbitPositionsRef={rabbitPositionsRef}
+              wolfPositionsRef={wolfPositionsRef}
               terrainRef={terrainRef}
               heightMap={heightMap}
             />
@@ -48,9 +50,11 @@ function Game() {
           {wolves.map((wolf) => (
             <Wolf
               key={wolf.id}
+              id={wolf.id}
               position={wolf.position}
               rabbitStatusRef={rabbitStatusRef}
               rabbitPositionsRef={rabbitPositionsRef}
+              wolfPositionsRef={wolfPositionsRef}
               terrainRef={terrainRef}
               heightMap={heightMap}
             />

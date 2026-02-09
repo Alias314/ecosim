@@ -1,6 +1,6 @@
 import p5 from "p5";
 import { Color } from "three";
-import { useGameStore } from "../../../game/store";
+import { useGameStore } from "../game/store";
 
 const p = new p5((sketch) => {
   sketch.setup = () => {

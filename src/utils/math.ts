@@ -1,4 +1,4 @@
-import { MathUtils } from "three";
+import { MathUtils, Vector3 } from "three";
 
 export const getRandomNumberAtRange = (min, max) => {
   return MathUtils.randFloat(min, max);
@@ -9,15 +9,17 @@ export const getRandomRadian = (degree) => {
 };
 
 export const getDirection = (radian) => {
-  return { 
-    x: Math.cos(radian) / 100, 
-    z: Math.sin(radian) / 100 
-  };
+  const direction = new Vector3();
+  direction.set(Math.cos(radian) / 100, 0, Math.sin(radian) / 100);
+  return direction;
 };
 
 export const getRandomCoordinate = (range) => {
-  const x = Math.random() * range;
-  const y = 0;
-  const z = Math.random() * range;
-  return [x, y, z];
+  const coordinate = new Vector3();
+  coordinate.set(
+    Math.random() * range,
+    0,
+    Math.random() * range
+  )
+  return coordinate;
 };

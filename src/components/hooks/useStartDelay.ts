@@ -1,7 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { getRandomNumberAtRange } from '../../utils/math';
 
-const useStartDelay = (minDelay: number, maxDelay: number) => {
+interface UseStartDelayParams {
+  minDelay: number,
+  maxDelay: number
+}
+
+const useStartDelay = ({
+  minDelay, 
+  maxDelay
+}: UseStartDelayParams) => {
   const isReady = useRef(false);
   
   useEffect(() => {

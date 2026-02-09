@@ -1,11 +1,10 @@
-import Game from "./game/Game";
+import Game from "./components/game/Game";
 
 function App() {
-
   return (
-    <>
+    <div>
       <Game />
-    </>
+    </div>
   );
 }
 

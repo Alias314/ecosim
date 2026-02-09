@@ -1,50 +1,54 @@
-import { useEffect, useRef } from "react";
-import {
-  BallCollider,
-  RapierRigidBody,
-  RigidBody,
-} from "@react-three/rapier";
+import { useRef } from "react";
+import { rabbit } from "../../../constants/entity";
 import useEntityMovement from "../../hooks/useEntityMovement";
+import useGetDirection from "../../hooks/useGetDirection";
+import useHandleDeadEntity from "../../hooks/useHandleDeadEntity";
+import useHandleEntityState from "../../hooks/useHandleEntityState";
 
-interface SphereProps {
-  terrainRef: React.RefObject<Mesh | null>;
-}
-
-function Rabbit({
+const Rabbit = ({
   id,
   position,
-  rabbitStatusRef,
-  rabbitPositionsRef,
-  wolfPositionsRef,
-  terrainRef,
-  heightMap,
-}: SphereProps) {
-  const bodyRef = useRef<RapierRigidBody | null>(null);
-  const speed = 0.05;
-  const meshSize = 0.05;
+  rabbitsAttributeRef,
+  wolvesAttributeRef,
+  heightMap
+}) => {
+  const stateRef = useRef("explore");
+  const meshRef = useRef();
+  const direction = useGetDirection(meshRef, wolvesAttributeRef, stateRef);
+
+  useHandleDeadEntity(
+    id,
+    meshRef, 
+    rabbitsAttributeRef
+  );
+
+  useHandleEntityState(
+    meshRef,
+    rabbit.type,
+    rabbit.detectionRange,
+    wolvesAttributeRef,
+    stateRef
+  )
 
   useEntityMovement(
-    id, 
-    bodyRef, 
-    terrainRef, 
-    rabbitStatusRef, 
-    rabbitPositionsRef, 
-    wolfPositionsRef,
-    heightMap, 
-    meshSize, 
-    speed
+    id,
+    meshRef,
+    direction,
+    rabbit.speed,
+    heightMap,
+    rabbitsAttributeRef,
   );
 
   return (
-    <RigidBody ref={bodyRef} position={position} type="kinematicPosition">
-      <mesh position={[0, 0, 0]} visible={rabbitStatusRef.current[id]}>
-        <icosahedronGeometry args={[meshSize, 2]} />
-        <meshStandardMaterial color={"red"} />
-      </mesh>
-
-      <BallCollider args={[1]} />
-    </RigidBody>
+    <mesh 
+      ref={meshRef} 
+      position={position} 
+      visible={rabbitsAttributeRef.current[id].isAlive}
+    >
+      <icosahedronGeometry args={[rabbit.size, 2]} />
+      <meshStandardMaterial color={"red"} />
+    </mesh>
   );
-}
+};
 
 export default Rabbit;

@@ -1,13 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import { getDirection, getRandomRadian } from '../../utils/math';
+import { Vector3 } from 'three';
 
-const useGetNewDirection = (delay: number) => {
-  const direction = useRef({ x: 0, z: 0 });
+const useGetRandomDirection = (delay) => {
+  const direction = useMemo(() => new Vector3(), []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const radian = getRandomRadian(360);
-      direction.current = getDirection(radian);
+      direction.copy(getDirection(radian));
     }, delay);
 
     return () => clearInterval(interval);
@@ -16,4 +17,4 @@ const useGetNewDirection = (delay: number) => {
   return direction;
 };
 
-export default useGetNewDirection;
+export default useGetRandomDirection;

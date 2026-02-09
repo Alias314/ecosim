@@ -38,4 +38,4 @@ export const boundary = {
   z: { min: 0, max: 10 },
 };
 
-export const boundaryOffset = 0.1;
+export const boundaryOffset = 0.01;

@@ -1,20 +1,19 @@
+import { boundary, boundaryOffset, terrainType } from "../constants/terrain";
 
-export const handleOutOfBounds = (nextPos, boundary) => {
-  const offset = 0.01;
-  
-  if (nextPos.x < boundary.x.min) nextPos.x = boundary.x.min + offset;
-  if (nextPos.x > boundary.x.max) nextPos.x = boundary.x.max - offset;
-  if (nextPos.z < boundary.z.min) nextPos.z = boundary.z.min + offset;
-  if (nextPos.z > boundary.z.max) nextPos.z = boundary.z.max - offset;
+export const handleOutOfBounds = (pos) => {
+  if (pos.x < boundary.x.min) pos.x = boundary.x.min + boundaryOffset;
+  if (pos.x > boundary.x.max) pos.x = boundary.x.max - boundaryOffset;
+  if (pos.z < boundary.z.min) pos.z = boundary.z.min + boundaryOffset;
+  if (pos.z > boundary.z.max) pos.z = boundary.z.max - boundaryOffset;
 };
 
-export const getTerrainIndex = (nextPos, terrainSize) => {
+export const getTerrainIndex = (pos, terrainSize) => {
   return {
-    x: Math.floor((terrainSize / 10) * nextPos.x),
-    z: Math.floor((terrainSize / 10) * nextPos.z)
+    i: Math.floor((terrainSize / boundary.x.max) * pos.x),
+    j: Math.floor((terrainSize / boundary.z.max) * pos.z)
   }
 };
 
-export const isOnWater = (nextY) => {
-  return nextY <= 0.4;
+export const isOnWater = (posY) => {
+  return posY <= terrainType.water.maxHeight;
 };

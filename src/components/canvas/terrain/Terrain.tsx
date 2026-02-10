@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { PlaneGeometry, Mesh, Color, BufferAttribute } from "three";
-import { getTerrainColor } from "./terrainUtils";
+import { getTerrainColor } from "../../../utils/terrain";
 import { useGameStore } from "../../../game/store";
 import { terrainType } from "../../../constants/terrain";
 

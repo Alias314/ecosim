@@ -31,9 +31,11 @@ export const terrainType = {
     minColor: new Color('#22c55e'),
     maxColor: new Color('#d1d5db')
   },
-}
+};
 
 export const boundary = {
   x: { min: 0, max: 10 },
   z: { min: 0, max: 10 },
 };
+
+export const boundaryOffset = 0.01;

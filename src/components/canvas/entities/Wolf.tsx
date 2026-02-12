@@ -41,7 +41,8 @@ function Wolf({
     id,
     meshRef, 
     direction, 
-    wolf.speed, 
+    wolf.speed,
+    wolf.speedOnWater,
     heightMap,
     wolvesAttributeRef,
   );

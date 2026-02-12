@@ -2,36 +2,43 @@ import { useFrame } from '@react-three/fiber';
 import React, { useEffect } from 'react'
 import { Vector3 } from 'three';
 import { terrainType } from '../../constants/terrain';
-import { handleOutOfBounds, getTerrainIndex } from '../../utils/canvas';
+import { handleOutOfBounds, getTerrainIndex, isOnWater } from '../../utils/canvas';
+import { useGameStore } from '../../game/store';
 
 const useEntityMovement = (
   id, 
   entityMeshRef, 
   direction, 
-  speed, 
+  speed,
+  speedOnWater,
+  entitySize,
   heightMap, 
-  entityAttributesRef
+  entityAttributes
 ) => {
+  const terrainHeight = useGameStore((state) => state.terrainHeight);
   const nextPos = new Vector3();
   
   useFrame(() => {
-    if (!entityAttributesRef.current[id].isAlive) return;
+    if (!entityAttributes[id].isAlive) return;
 
     const entityPos = entityMeshRef.current.position;
     
-    nextPos.x = entityPos.x + direction.x * speed;
-    nextPos.z = entityPos.z + direction.z * speed;
-    handleOutOfBounds(nextPos);
-    
     const terrainIndex = getTerrainIndex(nextPos, 512);
+    const height = heightMap[terrainIndex.j][terrainIndex.i];
     nextPos.y = Math.max(
       terrainType.water.maxHeight, 
       heightMap[terrainIndex.j][terrainIndex.i]
     );
-    nextPos.y = nextPos.y * 4 + 0.05;
+    nextPos.y = nextPos.y * terrainHeight + entitySize;
     
+    const currentSpeed = isOnWater(height) ? speedOnWater : speed;
+    nextPos.x = entityPos.x + direction.x * currentSpeed;
+    nextPos.z = entityPos.z + direction.z * currentSpeed;
+    handleOutOfBounds(nextPos);
+
+    nextPos.lerpVectors(entityPos, nextPos, 0.1);
     entityPos.copy(nextPos);
-    entityAttributesRef.current[id].position = entityPos.clone();
+    entityAttributes[id].position = entityPos.clone();
   });
 };
 

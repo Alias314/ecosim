@@ -4,29 +4,32 @@ import useEntityMovement from "../../hooks/useEntityMovement";
 import useGetDirection from "../../hooks/useGetDirection";
 import useHandleDeadEntity from "../../hooks/useHandleDeadEntity";
 import useHandleEntityState from "../../hooks/useHandleEntityState";
+import useHandleHunger from "../../hooks/useHandleHunger";
+import useHandleEatEntity from "../../hooks/useHandleEatEntity";
 
 const Rabbit = ({
   id,
   position,
-  rabbitsAttributeRef,
-  wolvesAttributeRef,
+  entityAttributesRef,
   heightMap
 }) => {
   const stateRef = useRef("explore");
   const meshRef = useRef();
-  const direction = useGetDirection(meshRef, wolvesAttributeRef, stateRef);
+  const targetEntityRef = useRef();
+  const direction = useGetDirection(meshRef, targetEntityRef, stateRef);
 
   useHandleDeadEntity(
     id,
     meshRef, 
-    rabbitsAttributeRef
+    entityAttributesRef.current.rabbit
   );
 
   useHandleEntityState(
     meshRef,
-    rabbit.type,
     rabbit.detectionRange,
-    wolvesAttributeRef,
+    entityAttributesRef.current.wolf,
+    entityAttributesRef.current.bush,
+    targetEntityRef,
     stateRef
   )
 
@@ -35,17 +38,32 @@ const Rabbit = ({
     meshRef,
     direction,
     rabbit.speed,
+    rabbit.speedOnWater,
+    rabbit.size,
     heightMap,
-    rabbitsAttributeRef,
+    entityAttributesRef.current.rabbit,
   );
+
+  useHandleHunger(
+    id,
+    entityAttributesRef.current.rabbit
+  );
+
+  useHandleEatEntity(
+    id,
+    rabbit.size,
+    targetEntityRef,
+    entityAttributesRef.current.rabbit,
+    entityAttributesRef.current.bush
+  )
 
   return (
     <mesh 
       ref={meshRef} 
       position={position} 
-      visible={rabbitsAttributeRef.current[id].isAlive}
+      visible={entityAttributesRef.current.rabbit[id].isAlive}
     >
-      <icosahedronGeometry args={[rabbit.size, 2]} />
+      <icosahedronGeometry args={[rabbit.size]} />
       <meshStandardMaterial color={"red"} />
     </mesh>
   );

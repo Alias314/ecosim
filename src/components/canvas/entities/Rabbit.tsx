@@ -35,6 +35,7 @@ const Rabbit = ({
     meshRef,
     direction,
     rabbit.speed,
+    rabbit.speedOnWater,
     heightMap,
     rabbitsAttributeRef,
   );

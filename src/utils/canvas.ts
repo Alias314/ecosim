@@ -1,4 +1,5 @@
 import { boundary, boundaryOffset, terrainType } from "../constants/terrain";
+import { getRandomCoordinate } from "./math";
 
 export const handleOutOfBounds = (pos) => {
   if (pos.x < boundary.x.min) pos.x = boundary.x.min + boundaryOffset;
@@ -17,3 +18,15 @@ export const getTerrainIndex = (pos, terrainSize) => {
 export const isOnWater = (posY) => {
   return posY <= terrainType.water.maxHeight;
 };
+
+export const getSpawnCoordinate = (range, heightMap) => {
+  let spawnCoordinate = getRandomCoordinate(range);
+  let terrainIndex = getTerrainIndex(spawnCoordinate, 512);
+
+  while (heightMap[terrainIndex.j][terrainIndex.i] > terrainType.water.maxHeight) {
+    spawnCoordinate = getRandomCoordinate(range);
+    terrainIndex = getTerrainIndex(spawnCoordinate, 512);
+  }
+
+  return spawnCoordinate;
+}

@@ -23,7 +23,7 @@ export const getSpawnCoordinate = (range, heightMap) => {
   let spawnCoordinate = getRandomCoordinate(range);
   let terrainIndex = getTerrainIndex(spawnCoordinate, 512);
 
-  while (heightMap[terrainIndex.j][terrainIndex.i] > terrainType.water.maxHeight) {
+  while (heightMap[terrainIndex.j][terrainIndex.i] <= terrainType.water.maxHeight) {
     spawnCoordinate = getRandomCoordinate(range);
     terrainIndex = getTerrainIndex(spawnCoordinate, 512);
   }

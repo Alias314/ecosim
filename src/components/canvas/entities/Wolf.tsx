@@ -3,38 +3,47 @@ import { wolf } from "../../../constants/entity";
 import useEntityMovement from "../../hooks/useEntityMovement";
 import useHandleEntityState from "../../hooks/useHandleEntityState";
 import useGetDirection from "../../hooks/useGetDirection";
-import useHandleKillInRange from "../../hooks/useHandleKillInRange";
 import useHandleDeadEntity from "../../hooks/useHandleDeadEntity";
+import useHandleEatEntity from "../../hooks/useHandleEatEntity";
+import useHandleHunger from "../../hooks/useHandleHunger";
 
 function Wolf({
   id,
   position,
-  rabbitsAttributeRef,
-  wolvesAttributeRef,
+  entityAttributesRef,
   heightMap,
 }) {
   const stateRef = useRef("explore");
   const meshRef = useRef();
-  const direction = useGetDirection(meshRef, rabbitsAttributeRef, stateRef);
+  const targetEntityRef = useRef();
+  const direction = useGetDirection(meshRef, targetEntityRef, stateRef);
 
   useHandleDeadEntity(
     id,
     meshRef,
-    wolvesAttributeRef,
+    entityAttributesRef.current.wolf,
   )
 
   useHandleEntityState(
     meshRef,
-    wolf.type, 
     wolf.detectionRange, 
-    rabbitsAttributeRef, 
+    null, 
+    entityAttributesRef.current.rabbit,
+    targetEntityRef, 
     stateRef
   );
 
-  useHandleKillInRange(
-    wolf.attackRange, 
-    meshRef, 
-    rabbitsAttributeRef
+  useHandleEatEntity(
+    id,
+    wolf.size, 
+    targetEntityRef,
+    entityAttributesRef.current.wolf,
+    entityAttributesRef.current.rabbit
+  );
+
+  useHandleHunger(
+    id,
+    entityAttributesRef.current.wolf
   );
 
   useEntityMovement(
@@ -43,14 +52,15 @@ function Wolf({
     direction, 
     wolf.speed,
     wolf.speedOnWater,
+    wolf.size,
     heightMap,
-    wolvesAttributeRef,
+    entityAttributesRef.current.wolf,
   );
 
   return (
     <mesh ref={meshRef} position={position}>
-      <icosahedronGeometry args={[wolf.size, 2]} />
-      <meshStandardMaterial color={"black"} />
+      <icosahedronGeometry args={[wolf.size]} />
+      <meshStandardMaterial color={"#525252"} />
     </mesh>
   );
 };

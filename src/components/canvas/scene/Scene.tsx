@@ -19,7 +19,8 @@ const Scene = ({ heightMap }) => {
     setRabbits, 
     setWolves, 
     rabbitsAttributeRef, 
-    wolvesAttributeRef
+    wolvesAttributeRef,
+    heightMap
   );
 
   return (

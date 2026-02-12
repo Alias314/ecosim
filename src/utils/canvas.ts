@@ -30,3 +30,4 @@ export const getSpawnCoordinate = (range, heightMap) => {
 
   return spawnCoordinate;
 }
+

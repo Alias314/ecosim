@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getRandomCoordinate } from "../../utils/math";
+import { getSpawnCoordinate } from "../../utils/canvas";
 
 const useSpawnEntity = (
   amountRabbits,
@@ -7,14 +8,15 @@ const useSpawnEntity = (
   setRabbits, 
   setWolves, 
   rabbitsAttributeRef, 
-  wolvesAttributeRef
+  wolvesAttributeRef,
+  heightMap
 ) => {
   useEffect(() => {
     const tempRabbits = [];
     const tempWolves = [];
 
     for (let i = 0; i < amountRabbits; i++) {
-      const startPos = getRandomCoordinate(10);
+      const startPos = getSpawnCoordinate(10, heightMap);
       
       tempRabbits.push({ 
         id: i,
@@ -29,7 +31,7 @@ const useSpawnEntity = (
     }
 
     for (let i = 0; i < amountWolves; i++) {
-      const startPos = getRandomCoordinate(10);
+      const startPos = getSpawnCoordinate(10, heightMap);
       
       tempWolves.push({
         id: i,

@@ -9,14 +9,6 @@ export const sidebarFields = [
     step: 1
   },
   {
-    id: 2,
-    title: "Terrain Height",
-    storeKey: "terrainHeight",
-    min: 1,
-    max: 10,
-    step: 0.1
-  },
-  {
     id: 3,
     title: "Height Map Size",
     storeKey: "heightMapSize",

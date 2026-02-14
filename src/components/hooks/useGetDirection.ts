@@ -25,7 +25,7 @@ const useGetDirection = (entityRef, targetEntityRef, stateRef) => {
         ).normalize();
       }
     } else if (stateRef.current === "explore") {
-      direction.copy(randomDirection.normalize());
+      direction.copy(randomDirection).normalize();
     }
   });
 

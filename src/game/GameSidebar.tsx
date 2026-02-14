@@ -1,4 +1,4 @@
-import Slider from "./Slider";
+import Slider from "../components/sidebar/Slider";
 
 interface GameSidebarProps {
   generateNewHeightMap: () => void;

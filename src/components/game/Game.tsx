@@ -1,51 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Scene from "../canvas/scene/Scene";
 import { generateHeightMap } from '../../utils/terrain';
+import { Canvas } from "@react-three/fiber";
+import { Label } from "radix-ui";
 import Sidebar from "../sidebar/Sidebar";
-import { spawnEntities } from "../../utils/entity";
 
 const Game = () => {
-  const [rabbits, setRabbits] = useState([]);
-  const [wolves, setWolves] = useState([]);
-  const [bushes, setBushes] = useState([]); 
-  const entityAttributesRef = useRef({ rabbit: [], wolf: [], bush: [] });
-  const [heightMap, setHeightMap] = useState(generateHeightMap());
-  
-  const generateNewHeightMap = () => {
-    setHeightMap(generateHeightMap());
-    generateEntities();
-  };
-
-  const generateEntities = () => {
-    spawnEntities(
-      400, 
-      40,
-      200,
-      setRabbits, 
-      setWolves,
-      setBushes,
-      entityAttributesRef,
-      heightMap
-    );
-  }
-  
-  useEffect(() => {
-    generateEntities();
-  }, []);
-
   return (
-    <div className="w-screen h-screen">
-      <Scene 
-        rabbits={rabbits}
-        wolves={wolves}
-        bushes={bushes}
-        entityAttributesRef={entityAttributesRef}
-        heightMap={heightMap} 
-      />
-      <Sidebar 
-        generateNewHeightMap={generateNewHeightMap} 
-        generateEntities={generateEntities} 
-      />
+    <div className="w-screen h-screen flex bg-gradient-to-t from-[#1F1F1F] via-[#363636] via-50% to-[#5C5C5C]">
+      <Canvas camera={{ position: [5, 6, 11] }} shadows>
+        <Scene />
+      </Canvas>
+
+      <Sidebar />
     </div>
   );
 };

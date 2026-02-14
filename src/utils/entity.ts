@@ -30,27 +30,27 @@ export const getNearestEntity = (entityPos, entityAttributes) => {
   };
 };
 
-export const spawnEntities = (
+export const getDeadEntityId = (entityAttributes) => {
+  const deadEntityId = entityAttributes.find(entity => entity.isAlive === false);
+  return deadEntityId;
+};
+
+export const spawnEntity = (
   amountRabbits,
   amountWolves,
   amountBush,
-  setRabbits, 
-  setWolves,
-  setBushes,
   entityAttributesRef,
   heightMap
 ) => {
-  const tempRabbits = [];
-  const tempWolves = [];
-  const tempBush = [];
+  const terrainSize = 512;
 
   for (let i = 0; i < amountRabbits; i++) {
-    const startPos = getSpawnCoordinate(10, heightMap).clone();
-    
-    tempRabbits.push({ 
-      id: i,
-      position: startPos
-    });
+    const startPos = getSpawnCoordinate(
+      rabbit.size,
+      10, 
+      terrainSize, 
+      heightMap
+    ).clone();
 
     entityAttributesRef.current.rabbit[i] = {
       id: i,
@@ -61,12 +61,12 @@ export const spawnEntities = (
   }
 
   for (let i = 0; i < amountWolves; i++) {
-    const startPos = getSpawnCoordinate(10, heightMap).clone();
-    
-    tempWolves.push({
-      id: i,
-      position: startPos
-    });
+    const startPos = getSpawnCoordinate(
+      wolf.size,
+      10, 
+      terrainSize,
+      heightMap
+    ).clone();
 
     entityAttributesRef.current.wolf[i] = {
       id: i,
@@ -77,14 +77,12 @@ export const spawnEntities = (
   }
 
   for (let i = 0; i < amountBush; i++) {
-    const startPos = getSpawnCoordinate(10, heightMap).clone();
-    const terrainIndex = getTerrainIndex(startPos, 512);
-    startPos.y = heightMap[terrainIndex.j][terrainIndex.i] * 2 + bush.size;
-    
-    tempBush.push({
-      id: i,
-      position: startPos
-    });
+    const startPos = getSpawnCoordinate(
+      bush.size,
+      10, 
+      terrainSize,
+      heightMap
+    ).clone();
 
     entityAttributesRef.current.bush[i] = {
       id: i,
@@ -92,8 +90,4 @@ export const spawnEntities = (
       isAlive: true,
     }
   }
-
-  setRabbits(tempRabbits);
-  setWolves(tempWolves);
-  setBushes(tempBush);
 };

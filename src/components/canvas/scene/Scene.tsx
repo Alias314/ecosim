@@ -1,31 +1,28 @@
-import { OrbitControls } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
-import useSpawnEntity from "../../hooks/useSpawnEntity";
-import Rabbit from "../entities/Rabbit";
-import Wolf from "../entities/Wolf";
+import { useRef } from "react";
 import Terrain from "../terrain/Terrain";
 import Bush from "../entities/Bush";
 import CameraController from "./CameraController";
+import Rabbit from "../entities/Rabbit";
+import Wolf from "../entities/Wolf";
+import { spawnEntity } from "../../../utils/entity";
+import { generateHeightMap } from "../../../utils/terrain";
 
-const Scene = ({ 
-  rabbits,
-  wolves,
-  bushes,
-  entityAttributesRef,
-  heightMap 
-}) => {
+const Scene = () => {
   const terrainRef = useRef(null);
+  const entityAttributesRef = useRef({ rabbit: [], wolf: [], bush: [] });
+  const heightMap = generateHeightMap();
+
+  spawnEntity(120, 10, 400, entityAttributesRef, heightMap);
 
   return (
-    <Canvas camera={{ position: [12.5, 9, 12.5] }} shadows>
+    <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[15, 10, -15]} intensity={2} castShadow />
-      <OrbitControls />
-      {/* <CameraController terrainRef={terrainRef} /> */}
+      <CameraController terrainRef={terrainRef} />
       <Terrain terrainRef={terrainRef} heightMap={heightMap} />
-
-      {rabbits.map((rabbit) => (
+      <gridHelper position={[5, 0, 5]} args={[200, 100]} />
+      
+      {entityAttributesRef.current.rabbit.map((rabbit) => (
         <Rabbit
           key={rabbit.id}
           id={rabbit.id}
@@ -35,7 +32,7 @@ const Scene = ({
         />
       ))}
 
-      {wolves.map((wolf) => (
+      {entityAttributesRef.current.wolf.map((wolf) => (
         <Wolf
           key={wolf.id}
           id={wolf.id}
@@ -45,15 +42,14 @@ const Scene = ({
         />
       ))}
 
-      {bushes.map((bush) => (
+      {entityAttributesRef.current.bush.map((bush) => (
         <Bush 
           key={bush.id}
           id={bush.id}
-          position={bush.position}
           entityAttributesRef={entityAttributesRef}
         />
       ))}
-    </Canvas>
+    </>
   );
 };
 

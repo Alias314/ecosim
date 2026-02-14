@@ -1,8 +1,8 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { bush } from "../../../constants/entity";
 import useHandleDeadEntity from "../../hooks/useHandleDeadEntity";
 
-const Bush = ({ id, position, entityAttributesRef }) => {
+const Bush = ({ id, entityAttributesRef }) => {
   const meshRef = useRef();
   
   useHandleDeadEntity(
@@ -12,7 +12,7 @@ const Bush = ({ id, position, entityAttributesRef }) => {
   );
 
   return (
-    <mesh ref={meshRef} position={position}>
+    <mesh ref={meshRef} position={entityAttributesRef.current.bush[id].position}>
       <icosahedronGeometry args={[bush.size]} />
       <meshStandardMaterial 
         color={"#06b300"}

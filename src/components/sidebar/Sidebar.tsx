@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { sidebarFields } from '../../constants/sidebar';
-import Slider from '../../game/Slider';
+import Slider from './Slider';
 
 interface SideBarProps {
   generateNewHeightMap: () => void;
@@ -12,7 +12,9 @@ const Sidebar: FC<SideBarProps> = ({
   generateEntities 
 }) => {
   return (
-    <div className="absolute top-0 w-[300px] m-2 p-4 bg-white border-2 rounded-xl">
+    <div className="w-[450px] p-4 bg-[#393943]">
+      <h2 className="text-2xl text-gray-100 font-semibold">Terrain</h2>
+
       {sidebarFields.map((field) => (
         <Slider 
           key={field.id}
@@ -25,7 +27,7 @@ const Sidebar: FC<SideBarProps> = ({
         />
       ))}
       
-      <button
+      {/* <button
         className="my-2 px-2 text-lg border rounded-md hover:bg-gray-200"
         onClick={generateNewHeightMap}
       >
@@ -36,7 +38,7 @@ const Sidebar: FC<SideBarProps> = ({
         onClick={generateEntities}
       >
         Spawn entities
-      </button>
+      </button> */}
     </div>
   );
 };

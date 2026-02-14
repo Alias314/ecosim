@@ -1,6 +1,7 @@
-import { useGameStore } from "./store";
+import { useGameStore } from "../../game/store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShuffle } from "@fortawesome/free-solid-svg-icons";
+import { Label } from "radix-ui";
 
 interface SliderProps {
   title: String;
@@ -40,11 +41,11 @@ function Slider({
   return (
     <div className="w-full flex-col">
       <div className="w-full flex justify-between">
-        <label className="">{title}</label>
+        <Label.Root className="text-gray-100">{title}</Label.Root>
 
         <div>
           <input
-            className="w-22 px-2 text-end border rounded-md"
+            className="w-22 px-2 text-gray-100 text-end bg-[#2A2B34] rounded-md"
             type="number"
             value={value}
             step={step}
@@ -61,9 +62,9 @@ function Slider({
         </div>
       </div>
 
-      {!enableRandomizer && (
+      {/* {!enableRandomizer && (
         <input
-          className="w-full border rounded-md"
+          className="w-full bg-amber-500 rounded-md"
           type="range"
           value={value}
           step={step}
@@ -71,7 +72,7 @@ function Slider({
           max={max}
           onChange={handleInputChange}
         />
-      )}
+      )} */}
     </div>
   );
 }

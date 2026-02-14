@@ -14,9 +14,9 @@ interface GameState {
 
 export const useGameStore = create<GameState>((set) => ({
     terrainSize: 512,
-    terrainHeight: 2,
+    terrainHeight: 1,
     heightMapSize: 512,
-    heightMapScale: 3,
+    heightMapScale: 6,
     zoomScale: 1.5,
     lod: 9,
     falloff: 0.5,

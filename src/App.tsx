@@ -6,6 +6,6 @@ function App() {
       <Game />
     </div>
   );
-}
+};
 
 export default App;

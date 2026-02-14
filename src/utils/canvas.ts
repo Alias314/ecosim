@@ -15,11 +15,7 @@ export const getTerrainIndex = (pos, terrainSize) => {
   }
 };
 
-export const isOnWater = (posY) => {
-  return posY <= terrainType.water.maxHeight;
-};
-
-export const getSpawnCoordinate = (range, heightMap) => {
+export const getSpawnCoordinate = (entitySize, range, terrainSize, heightMap) => {
   let spawnCoordinate = getRandomCoordinate(range);
   let terrainIndex = getTerrainIndex(spawnCoordinate, 512);
 
@@ -28,6 +24,11 @@ export const getSpawnCoordinate = (range, heightMap) => {
     terrainIndex = getTerrainIndex(spawnCoordinate, 512);
   }
 
-  return spawnCoordinate;
-}
+  spawnCoordinate.y = heightMap[terrainIndex.j][terrainIndex.i] + entitySize;
 
+  return spawnCoordinate;
+};
+
+export const isOnWater = (posY) => {
+  return posY <= terrainType.water.maxHeight;
+};

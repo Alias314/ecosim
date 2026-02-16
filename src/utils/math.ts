@@ -16,10 +16,6 @@ export const getDirection = (radian) => {
 
 export const getRandomCoordinate = (range) => {
   const coordinate = new Vector3();
-  coordinate.set(
-    Math.random() * range,
-    0,
-    Math.random() * range
-  )
+  coordinate.set(Math.random() * range, 0, Math.random() * range)
   return coordinate;
 };

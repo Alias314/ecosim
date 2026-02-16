@@ -1,24 +1,28 @@
 import { useFrame } from '@react-three/fiber'
-import { bush } from '../../constants/entity';
-import { getSpawnCoordinate, getTerrainIndex } from '../../utils/canvas';
+import { bush, rabbit } from '../../constants/entity';
+import { getSpawnCoordinate } from '../../utils/canvas';
+import { getDeadEntityId } from '../../utils/entity';
 
 const useSpawnEntityInterval = (
+  entity,
   entityAttributes,
   heightMap
 ) => {
   useFrame(() => {
-    if (Math.random() > 0.5) return;
-    
-    const length = entityAttributes.length;
-    const startPos = getSpawnCoordinate(10, heightMap).clone();
-    const terrainIndex = getTerrainIndex(startPos, 512);
-    startPos.y = heightMap[terrainIndex.j][terrainIndex.i] * 2 + bush.size;
+    const randomNumber = Math.random();
+    const id = getDeadEntityId(entityAttributes);
+    if (randomNumber > 0.1 || id === null) return; 
 
-    entityAttributes.push({
-      id: length,
-      position: startPos,
-      isAlive: true
-    });
+    const startPos = getSpawnCoordinate(
+      entity.size,
+      10, 
+      512, 
+      heightMap
+    );
+
+    entityAttributes[id].isAlive = true;
+    entityAttributes[id].position = startPos;
+    entityAttributes[id].hungerCapacity = entity.hungerCapacity;
   });
 };
 

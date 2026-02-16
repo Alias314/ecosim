@@ -1,10 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { bush } from "../../../constants/entity";
 import useHandleDeadEntity from "../../hooks/useHandleDeadEntity";
+import useHandleEntityPosition from "../../hooks/useHandleEntityPosition";
 
 const Bush = ({ id, entityAttributesRef }) => {
   const meshRef = useRef();
   
+  useHandleEntityPosition(
+    id,
+    meshRef,
+    entityAttributesRef.current.bush
+  );
+
   useHandleDeadEntity(
     id,
     meshRef,

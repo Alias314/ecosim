@@ -13,7 +13,7 @@ const useHandleEatEntity = (
 
     if (targetEntity.id && targetEntity.distance < attackRange) {
       entityAttributes[targetEntity.id].isAlive = false;
-      originEntityAttributes[id].hungerCapacity += 1;
+      originEntityAttributes[id].hungerCapacity += 3;
     }
   });
 };

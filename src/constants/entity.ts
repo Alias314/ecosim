@@ -1,22 +1,23 @@
 
 export const rabbit = {
-  speed: 0.07,
-  speedOnWater: 0.02,
+  speed: 6,
+  speedOnWater: 1.1,
   hungerCapacity: 45,
   size: 0.04,
-  detectionRange: 1,
-  type: "prey"
+  detectionRange: 1.5, // 1.5
+  maxBreedingUrge: 5
 };
 
 export const wolf = {
-  speed: 0.075,
-  speedOnWater: 0.025,
+  speed: 6,
+  speedOnWater: 1.1,
   hungerCapacity: 60,
-  size: 0.05,
-  detectionRange: 1.2,
-  type: "predator"
+  size: 0.07,
+  detectionRange: 2,
+  maxBreedingUrge: 5
 };
 
 export const bush = {
-  size: 0.08
+  size: 0.08,
+  hungerCapacity: 60
 };

@@ -9,10 +9,11 @@ const usePopulationTracker = (entityAttributes) => {
 
   useFrame((_, delta) => {
     elapsed.current += delta;
-    totalTime.current += delta;
+    totalTime.current += delta * useGameStore.getState().simulationSpeed;
 
     if (elapsed.current >= interval) {
       elapsed.current = 0;
+      if (useGameStore.getState().populationHistory.length === 0) totalTime.current = 0;
       useGameStore.getState().addPopulationSample({
         time: Math.floor(totalTime.current),
         rabbits: entityAttributes.rabbit.filter((rabbit) => rabbit.isAlive).length,

@@ -17,9 +17,17 @@ interface GameState {
     lod: number;
     falloff: number;
     noiseSeed: number;
+    simulationSpeed: number;
+    preySpeed: number;
+    predatorSpeed: number;
+    preyCount: number;
+    predatorCount: number;
+    plantCount: number;
+    plantSpawnRate: number;
     populationHistory: PopulationSample[];
     setValue: (key: keyof GameState, value: number) => void;
     addPopulationSample: (sample: PopulationSample) => void;
+    resetPopulationHistory: () => void;
 }
 
 export const useGameStore = create<GameState>((set) => ({
@@ -31,6 +39,13 @@ export const useGameStore = create<GameState>((set) => ({
     lod: defaultTerrainAttributes.lod,
     falloff: defaultTerrainAttributes.falloff,
     noiseSeed: defaultTerrainAttributes.seed,
+    simulationSpeed: 1,
+    preySpeed: 6,
+    predatorSpeed: 6,
+    preyCount: 300,
+    predatorCount: 10,
+    plantCount: 200,
+    plantSpawnRate: 50,
     populationHistory: [],
 
     setValue: (key, value) => set((state) => ({
@@ -41,5 +56,7 @@ export const useGameStore = create<GameState>((set) => ({
     addPopulationSample: (sample) => set((state) => {
         const newData = [...state.populationHistory, sample];
         return { populationHistory: newData };
-    })
+    }),
+
+    resetPopulationHistory: () => set({ populationHistory: [] })
 }));

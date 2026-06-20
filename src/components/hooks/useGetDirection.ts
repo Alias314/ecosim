@@ -14,38 +14,43 @@ const useGetDirection = (id, entityAttributes, predatorAttributes, entityRef, ta
     const entityPos = entityRef.current.position;
 
     if (stateRef.current === "chase") {
-      const alignDirection = getAlignmentDirection(id, entityAttributes);
-      const separationDirection = getSeparationDirection(id, entityAttributes);
-      alignDirection.sub(direction);
+      const separation = getSeparationDirection(id, entityAttributes);
+      if (separation.lengthSq() > 0) separation.normalize();
 
-      direction.sub(alignDirection);
-      direction.add(separationDirection);
-      direction.add(getChaseDirection(entityPos, targetEntity.position)).normalize();
+      direction
+        .copy(getChaseDirection(entityPos, targetEntity.position))
+        .addScaledVector(separation, 0.6)
+        .normalize();
     } else if (stateRef.current === "flee") {
-      const alignDirection = getAlignmentDirection(id, entityAttributes);
-      const cohesionDirection = getCohesionDirection(id, entityAttributes);
-      const separationDirection = getFleeDirection(id, entityAttributes, predatorAttributes);
+      const flee = getFleeDirection(id, entityAttributes, predatorAttributes);
+      const separation = getSeparationDirection(id, entityAttributes);
+      if (flee.lengthSq() > 0) flee.normalize();
+      if (separation.lengthSq() > 0) separation.normalize();
 
-      alignDirection.sub(direction);
-      cohesionDirection.sub(entityPos);
-
-      direction.sub(alignDirection);
-      direction.sub(cohesionDirection);
-      direction.add(separationDirection).normalize();
+      direction
+        .multiplyScalar(0.2)
+        .addScaledVector(flee, 2.0)
+        .addScaledVector(separation, 0.8)
+        .normalize();
     } else if (stateRef.current === "mating") {
       direction.copy(getChaseDirection(entityPos, targetEntity.position));
     } else if (stateRef.current === "explore") {
       if (direction.length() === 0) direction.copy(randomDirection);
-      const alignDirection = getAlignmentDirection(id, entityAttributes);
-      const cohesionDirection = getCohesionDirection(id, entityAttributes);
-      const separationDirection = getSeparationDirection(id, entityAttributes);
 
-      alignDirection.sub(direction);
-      cohesionDirection.sub(entityPos);
+      const alignment = getAlignmentDirection(id, entityAttributes);
+      const cohesion = getCohesionDirection(id, entityAttributes);
+      const separation = getSeparationDirection(id, entityAttributes);
 
-      direction.sub(alignDirection).multiplyScalar(10);
-      direction.sub(cohesionDirection);
-      direction.add(separationDirection).normalize();
+      if (alignment.lengthSq() > 0) alignment.normalize();
+      if (cohesion.lengthSq() > 0) cohesion.sub(entityPos).normalize();
+      if (separation.lengthSq() > 0) separation.normalize();
+
+      direction
+        .multiplyScalar(0.5)
+        .addScaledVector(separation, 1.5)
+        .addScaledVector(alignment, 0.5)
+        .addScaledVector(cohesion, 0.3)
+        .normalize();
     }
 
     entityAttributes[id].direction.copy(direction);

@@ -34,6 +34,9 @@ function Wolf({ id, position, entityAttributes, heightMap }) {
     entityAttributes.wolf,
     targetEntityRef,
     stateRef,
+    0,
+    wolf.breedingHunger,
+    wolf.seekHunger,
   );
 
   useHandleEntityPosition(id, meshRef, entityAttributes.wolf);
@@ -42,8 +45,8 @@ function Wolf({ id, position, entityAttributes, heightMap }) {
     id,
     meshRef,
     direction,
-    wolf.speed,
-    wolf.speedOnWater,
+    "predatorSpeed",
+    wolf.waterSpeedFactor,
     wolf.size,
     heightMap,
     entityAttributes.wolf,
@@ -53,10 +56,12 @@ function Wolf({ id, position, entityAttributes, heightMap }) {
 
   useHandleEatEntity(
     id,
-    wolf.size + 0.02,
+    wolf.eatRange,
     targetEntityRef,
     entityAttributes.wolf,
     entityAttributes.rabbit,
+    wolf.hungerCapacity,
+    wolf.foodValue,
   );
 
   useHandleHunger(id, entityAttributes.wolf);

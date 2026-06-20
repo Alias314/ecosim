@@ -59,39 +59,3 @@ export function getTerrainColor(noiseValue: number, biome) {
   const normalized = normalize(noiseValue, biome.minHeight, biome.maxHeight);
   return color.lerpColors(biome.minColor, biome.maxColor, normalized);
 }
-
-function smoothstep(edge0: number, edge1: number, x: number) {
-  const t = Math.min(Math.max((x - edge0) / (edge1 - edge0), 0), 1);
-  return t * t * (3 - 2 * t);
-}
-
-export function getBlendedTerrainColor(noiseValue: number, terrainType) {
-  const color = new Color();
-
-  if (noiseValue <= terrainType.water.maxHeight) {
-    color.copy(terrainType.water.minColor);
-  } else if (noiseValue < terrainType.sand.maxHeight) {
-    color.copy(terrainType.sand.minColor);
-  } else if (noiseValue < terrainType.grass.maxHeight) {
-    color.copy(terrainType.grass.minColor);
-  } else {
-    color.copy(terrainType.mountain.minColor);
-  }
-
-  const outlineColor = terrainType.waterOutline.minColor;
-  const outlineWidth = 0.015; // increase for a thicker/softer fade
-
-  const boundaries = [
-    terrainType.water.maxHeight,  // water -> sand edge
-    terrainType.sand.maxHeight,   // sand -> grass edge
-    terrainType.grass.maxHeight,  // grass -> mountain edge
-  ];
-
-  for (const boundary of boundaries) {
-    const distance = Math.abs(noiseValue - boundary);
-    const blend = 1 - smoothstep(0, outlineWidth, distance);
-    if (blend > 0) color.lerp(outlineColor, blend);
-  }
-
-  return color;
-}

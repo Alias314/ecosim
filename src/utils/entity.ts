@@ -193,8 +193,8 @@ export const spawnBabyEntity = (entity, parentId, entityAttributes) => {
   handleOutOfBounds(startPos);
   entityAttributes[id].isAlive = true;
   entityAttributes[id].position = startPos;
-  entityAttributes[id].hungerCapacity = entity.hungerCapacity;
-  entityAttributes[id].maxBreedingUrge = 10;
+  entityAttributes[id].hungerCapacity = entity.hungerCapacity / 2;
+  entityAttributes[id].maxBreedingUrge = entity.maxBreedingUrge;
 };
 
 export const killAllEntities = (entityAttributes) => {

@@ -2,18 +2,24 @@ import { useFrame } from '@react-three/fiber';
 
 const useHandleEatEntity = (
   id,
-  attackRange, 
+  attackRange,
   targetEntityRef,
   originEntityAttributes,
-  entityAttributes
+  entityAttributes,
+  maxHunger,
+  foodValue
 ) => {
   useFrame(() => {
     const targetEntity = targetEntityRef.current;
-    if (!targetEntity) return;
+    if (!targetEntity || targetEntity.id == null) return;
 
-    if (targetEntity.id && targetEntity.distance < attackRange) {
-      entityAttributes[targetEntity.id].isAlive = false;
-      originEntityAttributes[id].hungerCapacity += 3;
+    const target = entityAttributes[targetEntity.id];
+    if (target.isAlive && targetEntity.distance < attackRange) {
+      target.isAlive = false;
+      originEntityAttributes[id].hungerCapacity = Math.min(
+        originEntityAttributes[id].hungerCapacity + foodValue,
+        maxHunger
+      );
     }
   });
 };

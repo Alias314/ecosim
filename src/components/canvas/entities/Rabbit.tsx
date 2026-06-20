@@ -38,7 +38,10 @@ const Rabbit = ({
     entityAttributes.bush,
     entityAttributes.rabbit,
     targetEntityRef,
-    stateRef
+    stateRef,
+    rabbit.panicHunger,
+    rabbit.breedingHunger,
+    rabbit.seekHunger
   );
   
   useHandleEntityPosition(
@@ -51,8 +54,8 @@ const Rabbit = ({
     id,
     meshRef,
     direction,
-    rabbit.speed,
-    rabbit.speedOnWater,
+    "preySpeed",
+    rabbit.waterSpeedFactor,
     rabbit.size,
     heightMap,
     entityAttributes.rabbit,
@@ -66,10 +69,12 @@ const Rabbit = ({
 
   useHandleEatEntity(
     id,
-    rabbit.size + 0.02,
+    rabbit.eatRange,
     targetEntityRef,
     entityAttributes.rabbit,
-    entityAttributes.bush
+    entityAttributes.bush,
+    rabbit.hungerCapacity,
+    rabbit.foodValue
   );
 
   useHandleHunger(

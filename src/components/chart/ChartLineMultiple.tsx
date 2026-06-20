@@ -5,6 +5,8 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useGameStore } from "@/game/store";
 
@@ -69,6 +71,10 @@ export function ChartLineMultiple() {
                 fill: "#888888",
                 fontSize: 14,
               }}
+            />
+
+            <ChartTooltip
+              content={<ChartTooltipContent labelFormatter={(value) => `Time: ${value}s`} />}
             />
 
             <ChartLegend

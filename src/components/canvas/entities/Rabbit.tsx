@@ -8,13 +8,13 @@ import useHandleEatEntity from "../../hooks/useHandleEatEntity";
 import useHandleEntityPosition from "../../hooks/useHandleEntityPosition";
 import useHandleMovement from "../../hooks/useHandleMovement";
 import useHandleBreedingUrge from "../../hooks/useHandleBreedingUrge";
-import { useFrame } from "@react-three/fiber";
 import useHandleBreeding from "../../hooks/useHandleBreeding";
+import { Outlines } from "@react-three/drei";
 
 const Rabbit = ({
   id,
   position,
-  entityAttributesRef,
+  entityAttributes,
   heightMap
 }) => {
   const stateRef = useRef("explore");
@@ -23,8 +23,8 @@ const Rabbit = ({
   
   const direction = useGetDirection(
     id, 
-    entityAttributesRef.current.rabbit, 
-    entityAttributesRef.current.wolf, 
+    entityAttributes.rabbit, 
+    entityAttributes.wolf, 
     meshRef, 
     targetEntityRef, 
     stateRef
@@ -34,9 +34,9 @@ const Rabbit = ({
     id,
     meshRef,
     rabbit.detectionRange,
-    entityAttributesRef.current.wolf,
-    entityAttributesRef.current.bush,
-    entityAttributesRef.current.rabbit,
+    entityAttributes.wolf,
+    entityAttributes.bush,
+    entityAttributes.rabbit,
     targetEntityRef,
     stateRef
   );
@@ -44,7 +44,7 @@ const Rabbit = ({
   useHandleEntityPosition(
     id,
     meshRef,
-    entityAttributesRef.current.rabbit
+    entityAttributes.rabbit
   );
   
   useHandleMovement(
@@ -55,46 +55,47 @@ const Rabbit = ({
     rabbit.speedOnWater,
     rabbit.size,
     heightMap,
-    entityAttributesRef.current.rabbit,
+    entityAttributes.rabbit,
   );
   
   useHandleDeadEntity(
     id,
     meshRef, 
-    entityAttributesRef.current.rabbit
+    entityAttributes.rabbit
   );
 
   useHandleEatEntity(
     id,
-    rabbit.size,
+    rabbit.size + 0.02,
     targetEntityRef,
-    entityAttributesRef.current.rabbit,
-    entityAttributesRef.current.bush
+    entityAttributes.rabbit,
+    entityAttributes.bush
   );
 
   useHandleHunger(
     id,
-    entityAttributesRef.current.rabbit
+    entityAttributes.rabbit
   );
 
-  // useHandleBreeding(
-  //   id,
-  //   rabbit,
-  //   stateRef,
-  //   targetEntityRef,
-  //   entityAttributesRef.current.rabbit,
-  //   heightMap
-  // );
+  useHandleBreeding(
+    id,
+    rabbit,
+    stateRef,
+    targetEntityRef,
+    entityAttributes.rabbit,
+    heightMap
+  );
 
-  // useHandleBreedingUrge(
-  //   id,
-  //   entityAttributesRef.current.rabbit,
-  // );
+  useHandleBreedingUrge(
+    id,
+    entityAttributes.rabbit,
+  );
 
   return (
     <mesh ref={meshRef} position={position}>
       <icosahedronGeometry args={[rabbit.size]} />
-      <meshStandardMaterial color={"red"} />
+      <meshBasicMaterial color={"#3b82f6"} />
+      <Outlines thickness={1} color={"black"} />
     </mesh>
   );
 };

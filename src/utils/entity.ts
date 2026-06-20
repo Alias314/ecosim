@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Vector2, Vector3 } from "three";
 import { rabbit, wolf, bush } from "../constants/entity";
 import { getSpawnCoordinate, getTerrainIndex, handleOutOfBounds } from "./canvas";
+import { defaultTerrainAttributes } from "@/constants/terrain";
 
 export const getNearestEntity = (entityPos, entityAttributes) => {
   const entityPosXZ = new Vector2(entityPos.x, entityPos.z);
@@ -71,10 +72,10 @@ export const initSpawnEntity = (
   amountRabbits,
   amountWolves,
   amountBush,
-  entityAttributesRef,
+  entityAttributes,
   heightMap
 ) => {
-  const terrainSize = 512;
+  const terrainSize = defaultTerrainAttributes.size;
 
   for (let i = 0; i < amountRabbits; i++) {
     const startPos = getSpawnCoordinate(
@@ -84,8 +85,9 @@ export const initSpawnEntity = (
       heightMap
     ).clone();
 
-    entityAttributesRef.current.rabbit[i].isAlive = true;
-    entityAttributesRef.current.rabbit[i].position = startPos;
+    entityAttributes.rabbit[i].isAlive = true;
+    entityAttributes.rabbit[i].position = startPos;
+    entityAttributes.rabbit[i].hungerCapacity = rabbit.hungerCapacity;
   }
 
   for (let i = 0; i < amountWolves; i++) {
@@ -96,8 +98,9 @@ export const initSpawnEntity = (
       heightMap
     ).clone();
 
-    entityAttributesRef.current.wolf[i].isAlive = true
-    entityAttributesRef.current.wolf[i].position = startPos.clone();
+    entityAttributes.wolf[i].isAlive = true
+    entityAttributes.wolf[i].position = startPos.clone();
+    entityAttributes.wolf[i].hungerCapacity = wolf.hungerCapacity;
   }
 
   for (let i = 0; i < amountBush; i++) {
@@ -108,17 +111,17 @@ export const initSpawnEntity = (
       heightMap
     ).clone();
 
-    entityAttributesRef.current.bush[i].isAlive = true;
-    entityAttributesRef.current.bush[i].position = startPos.clone();
+    entityAttributes.bush[i].isAlive = true;
+    entityAttributes.bush[i].position = startPos.clone();
   }
 };
 
-export const initEntityPool = (entityAttributesRef) => {
-  const poolSize = 400;
+export const getEntityPool = (poolSize) => {
+  const entityAttributes = {rabbit: [], wolf: [], bush: []};
   const initPos = new Vector3(0, 0, 0);
 
   for (let i = 0; i < poolSize; i++) {
-    entityAttributesRef.current.rabbit[i] = {
+    entityAttributes.rabbit.push({
       id: i,
       position: initPos,
       isAlive: false,
@@ -126,11 +129,11 @@ export const initEntityPool = (entityAttributesRef) => {
       maxBreedingUrge: rabbit.maxBreedingUrge,
       gender: getRandomGender(),
       direction: new Vector3()
-    }
+    });
   }
 
   for (let i = 0; i < poolSize; i++) {
-    entityAttributesRef.current.wolf[i] = {
+    entityAttributes.wolf.push({
       id: i,
       position: initPos,
       isAlive: false,
@@ -138,17 +141,23 @@ export const initEntityPool = (entityAttributesRef) => {
       maxBreedingUrge: wolf.maxBreedingUrge,
       gender: getRandomGender(),
       direction: new Vector3()
-    }
+    });
   }
 
   for (let i = 0; i < poolSize; i++) {
-    entityAttributesRef.current.bush[i] = {
+    entityAttributes.bush.push({
       id: i,
       position: initPos,
       isAlive: false,
       hungerCapacity: bush.hungerCapacity
-    }
+    });
   }
+
+  return entityAttributes;
+};
+
+export const isEntityAlive = (originEntityId, entityAttributes) => {
+  return entityAttributes[originEntityId].isAlive;
 };
 
 export const getRandomGender = () => {
@@ -163,7 +172,7 @@ export const spawnEntity = (entity, entityAttributes, heightMap) => {
   const startPos = getSpawnCoordinate(
     entity.size,
     10, 
-    512, 
+    defaultTerrainAttributes.size, 
     heightMap
   );
   
@@ -186,4 +195,12 @@ export const spawnBabyEntity = (entity, parentId, entityAttributes) => {
   entityAttributes[id].position = startPos;
   entityAttributes[id].hungerCapacity = entity.hungerCapacity;
   entityAttributes[id].maxBreedingUrge = 10;
+};
+
+export const killAllEntities = (entityAttributes) => {
+  for (const entityArr of Object.values(entityAttributes)) {
+    entityArr.forEach((entity) => {
+      entity.isAlive = false;
+    });
+  }
 };

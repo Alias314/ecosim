@@ -6,7 +6,6 @@ const TerrainContainer = () => {
     <mesh
       key={terrainContainerFragmentShader + terrainContainerVertexShader} 
       position={[5, -1, -5]}
-      // rotation
     >
       <boxGeometry args={[100, 1, 100]} />
       <shaderMaterial 

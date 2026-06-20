@@ -1,7 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import useGetRandomDirection from './useGetRandomDirection';
-import { getChaseDirection } from '../../utils/entity';
+import { getChaseDirection, isEntityAlive } from '../../utils/entity';
 import { getAlignmentDirection, getCohesionDirection, getFleeDirection, getSeparationDirection } from '../../utils/boids';
 
 const useGetDirection = (id, entityAttributes, predatorAttributes, entityRef, targetEntityRef, stateRef) => {
@@ -9,6 +9,7 @@ const useGetDirection = (id, entityAttributes, predatorAttributes, entityRef, ta
   const randomDirection = useGetRandomDirection(200);
   
   useFrame(() => {
+    if (!isEntityAlive(id, entityAttributes)) return;
     const targetEntity = targetEntityRef.current;
     const entityPos = entityRef.current.position;
 
@@ -28,7 +29,7 @@ const useGetDirection = (id, entityAttributes, predatorAttributes, entityRef, ta
       alignDirection.sub(direction);
       cohesionDirection.sub(entityPos);
 
-      direction.sub(alignDirection).multiplyScalar(10);
+      direction.sub(alignDirection);
       direction.sub(cohesionDirection);
       direction.add(separationDirection).normalize();
     } else if (stateRef.current === "mating") {

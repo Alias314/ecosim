@@ -1,57 +1,61 @@
-import { useRef } from "react";
 import Terrain from "../terrain/Terrain";
 import Bush from "../entities/Bush";
 import CameraController from "./CameraController";
 import Rabbit from "../entities/Rabbit";
 import Wolf from "../entities/Wolf";
-import { initEntityPool, initSpawnEntity } from "../../../utils/entity";
-import { generateHeightMap } from "../../../utils/terrain";
 import useSpawnEntityInterval from "../../hooks/useSpawnEntityInterval";
-import { bush, rabbit } from "../../../constants/entity";
+import { bush } from "../../../constants/entity";
+import { Grid } from "@react-three/drei";
+import usePopulationTracker from "@/components/hooks/usePopulationTracker";
 
-const Scene = () => {
-  const terrainRef = useRef(null);
-  const entityAttributesRef = useRef({ rabbit: [], wolf: [], bush: [] });
-  const heightMap = generateHeightMap();
-
-  initEntityPool(entityAttributesRef, heightMap);
-  initSpawnEntity(400, 15, 200, entityAttributesRef, heightMap);
-  useSpawnEntityInterval(bush, entityAttributesRef.current.bush, heightMap);
+const Scene = ({ entityAttributes, terrainAttributes }) => {
+  useSpawnEntityInterval(
+    bush,
+    entityAttributes.bush,
+    terrainAttributes.heightMap,
+  );
+  usePopulationTracker(entityAttributes);
 
   return (
     <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[15, 10, -15]} intensity={2} castShadow />
-      <CameraController terrainRef={terrainRef} />
-      <Terrain terrainRef={terrainRef} heightMap={heightMap} />
-      <gridHelper position={[5, 0, 5]} args={[200, 100]} />
-      
-      {entityAttributesRef.current.rabbit.map((rabbit) => (
+      <CameraController />
+      <Terrain heightMap={terrainAttributes.heightMap} />
+      <Grid
+        infiniteGrid
+        cellSize={1.5}
+        cellThickness={0.8}
+        cellColor="#6f6f6f"
+        sectionSize={1.5}
+        sectionThickness={0.8}
+        sectionColor="#6f6f6f"
+        fadeDistance={15}
+        position={[5, 0, 5]}
+      />
+
+      {entityAttributes.rabbit.map((rabbit) => (
         <Rabbit
           key={rabbit.id}
           id={rabbit.id}
           position={rabbit.position}
-          entityAttributesRef={entityAttributesRef}
-          heightMap={heightMap}
+          entityAttributes={entityAttributes}
+          heightMap={terrainAttributes.heightMap}
         />
       ))}
 
-      {entityAttributesRef.current.wolf.map((wolf) => (
+      {entityAttributes.wolf.map((wolf) => (
         <Wolf
           key={wolf.id}
           id={wolf.id}
           position={wolf.position}
-          entityAttributesRef={entityAttributesRef}
-          heightMap={heightMap}
+          entityAttributes={entityAttributes}
+          heightMap={terrainAttributes.heightMap}
         />
       ))}
 
-      {entityAttributesRef.current.bush.map((bush) => (
-        <Bush 
-          key={bush.id}
-          id={bush.id}
-          entityAttributesRef={entityAttributesRef}
-        />
+      {entityAttributes.bush.map((bush) => (
+        <Bush key={bush.id} id={bush.id} entityAttributes={entityAttributes} />
       ))}
     </>
   );

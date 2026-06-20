@@ -2,7 +2,7 @@ import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react'
 import { Vector3 } from 'three';
 
-const CameraController = ({ terrainRef }) => {
+const CameraController = () => {
   const { camera } = useThree();
   
   useEffect(() => {

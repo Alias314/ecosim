@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { getRandomNumberAtRange } from '../../utils/math';
+import { getRandomFloatAtRange } from '../../utils/math';
 
 interface UseStartDelayParams {
   minDelay: number,
@@ -13,7 +13,7 @@ const useStartDelay = ({
   const isReady = useRef(false);
   
   useEffect(() => {
-    const delay = getRandomNumberAtRange(minDelay, maxDelay);
+    const delay = getRandomFloatAtRange(minDelay, maxDelay);
 
     const timeout = setTimeout(() => {
       isReady.current = true;

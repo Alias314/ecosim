@@ -3,42 +3,47 @@ import { sidebarFields } from '../../constants/sidebar';
 import Slider from './Slider';
 
 interface SideBarProps {
-  generateNewHeightMap: () => void;
+  generateTerrain: () => void;
   generateEntities: () => void;
 }
 
 const Sidebar: FC<SideBarProps> = ({ 
-  generateNewHeightMap,
+  sliderTerrainAttributes,
+  setSliderTerrainAttributes,
+  generateTerrain,
   generateEntities 
 }) => {
   return (
-    <div className="w-[450px] p-4 bg-[#393943]">
+    <div className="w-[450px] p-4 bg-zinc-700">
       <h2 className="text-2xl text-gray-100 font-semibold">Terrain</h2>
 
       {sidebarFields.map((field) => (
         <Slider 
           key={field.id}
           title={field.title}
-          storeKey={field.storeKey}
+          keyTitle={field.key}
           min={field.min}
           max={field.max}
           step={field.step}
           enableRandomizer={field.enableRandomizer}
+          sliderTerrainAttributes={sliderTerrainAttributes}
+          setSliderTerrainAttributes={setSliderTerrainAttributes}
         />
       ))}
       
-      {/* <button
-        className="my-2 px-2 text-lg border rounded-md hover:bg-gray-200"
-        onClick={generateNewHeightMap}
+      <button
+        className="my-2 px-2 text-lg border rounded-md bg-white hover:bg-gray-300"
+        onClick={generateTerrain}
       >
         Generate terrain
       </button>
+
       <button
-        className="px-2 text-lg border rounded-md hover:bg-gray-200"
+        className="px-2 text-lg border rounded-md bg-white hover:bg-gray-300"
         onClick={generateEntities}
       >
         Spawn entities
-      </button> */}
+      </button>
     </div>
   );
 };

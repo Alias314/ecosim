@@ -3,15 +3,7 @@ export const sidebarFields = [
   {
     id: 1,
     title: "Terrain Size",
-    storeKey: "terrainSize",
-    min: 1,
-    max: 512,
-    step: 1
-  },
-  {
-    id: 3,
-    title: "Height Map Size",
-    storeKey: "heightMapSize",
+    key: "size",
     min: 1,
     max: 512,
     step: 1
@@ -19,7 +11,7 @@ export const sidebarFields = [
   {
     id: 4,
     title: "Height Map Scale",
-    storeKey: "heightMapScale",
+    key: "heightMapScale",
     min: 1,
     max: 32,
     step: 1
@@ -27,7 +19,7 @@ export const sidebarFields = [
   {
     id: 5,
     title: "Zoom",
-    storeKey: "zoomScale",
+    key: "zoom",
     min: 1,
     max: 10,
     step: 0.1
@@ -35,7 +27,7 @@ export const sidebarFields = [
   {
     id: 6,
     title: "LOD",
-    storeKey: "lod",
+    key: "lod",
     min: 1,
     max: 12,
     step: 1
@@ -43,7 +35,7 @@ export const sidebarFields = [
   {
     id: 7,
     title: "Falloff",
-    storeKey: "falloff",
+    key: "falloff",
     min: 0,
     max: 1,
     step: 0.1
@@ -51,7 +43,7 @@ export const sidebarFields = [
   {
     id: 8,
     title: "Seed",
-    storeKey: "noiseSeed",
+    key: "seed",
     min: 1,
     max: 100000,
     step: 1,

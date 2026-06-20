@@ -9,94 +9,76 @@ import useHandleEntityPosition from "../../hooks/useHandleEntityPosition";
 import useHandleMovement from "../../hooks/useHandleMovement";
 import useHandleBreedingUrge from "../../hooks/useHandleBreedingUrge";
 import useHandleBreeding from "../../hooks/useHandleBreeding";
+import { Outlines } from "@react-three/drei";
 
-function Wolf({
-  id,
-  position,
-  entityAttributesRef,
-  heightMap,
-}) {
+function Wolf({ id, position, entityAttributes, heightMap }) {
   const stateRef = useRef("explore");
   const meshRef = useRef();
   const targetEntityRef = useRef();
-  // const direction = useGetDirection(meshRef, targetEntityRef, stateRef);
-  
+
   const direction = useGetDirection(
-    id, 
-    entityAttributesRef.current.wolf, 
+    id,
+    entityAttributes.wolf,
     null,
-    meshRef, 
-    targetEntityRef, 
-    stateRef
+    meshRef,
+    targetEntityRef,
+    stateRef,
   );
 
   useHandleEntityState(
     id,
     meshRef,
-    wolf.detectionRange, 
-    null, 
-    entityAttributesRef.current.rabbit,
-    entityAttributesRef.current.wolf,
-    targetEntityRef, 
-    stateRef
+    wolf.detectionRange,
+    null,
+    entityAttributes.rabbit,
+    entityAttributes.wolf,
+    targetEntityRef,
+    stateRef,
   );
 
-  useHandleEntityPosition(
-    id,
-    meshRef,
-    entityAttributesRef.current.wolf
-  );
+  useHandleEntityPosition(id, meshRef, entityAttributes.wolf);
 
   useHandleMovement(
     id,
-    meshRef, 
-    direction, 
+    meshRef,
+    direction,
     wolf.speed,
     wolf.speedOnWater,
     wolf.size,
     heightMap,
-    entityAttributesRef.current.wolf,
+    entityAttributes.wolf,
   );
 
-  useHandleDeadEntity(
-    id,
-    meshRef,
-    entityAttributesRef.current.wolf,
-  );
+  useHandleDeadEntity(id, meshRef, entityAttributes.wolf);
 
   useHandleEatEntity(
     id,
-    wolf.size, 
+    wolf.size + 0.02,
     targetEntityRef,
-    entityAttributesRef.current.wolf,
-    entityAttributesRef.current.rabbit
+    entityAttributes.wolf,
+    entityAttributes.rabbit,
   );
 
-  useHandleHunger(
+  useHandleHunger(id, entityAttributes.wolf);
+
+  useHandleBreeding(
     id,
-    entityAttributesRef.current.wolf
+    wolf,
+    stateRef,
+    targetEntityRef,
+    entityAttributes.wolf,
+    heightMap,
   );
 
-  // useHandleBreeding(
-  //   id,
-  //   wolf,
-  //   stateRef,
-  //   targetEntityRef,
-  //   entityAttributesRef.current.wolf,
-  //   heightMap
-  // );
-
-  // useHandleBreedingUrge(
-  //   id,
-  //   entityAttributesRef.current.wolf
-  // );
+  useHandleBreedingUrge(id, entityAttributes.wolf);
 
   return (
     <mesh ref={meshRef} position={position}>
       <icosahedronGeometry args={[wolf.size]} />
-      <meshStandardMaterial color={"#525252"} />
+      <meshBasicMaterial color={"#ef4444"} />
+      <Outlines thickness={1} color={"black"} />
     </mesh>
   );
-};
+}
 
 export default Wolf;

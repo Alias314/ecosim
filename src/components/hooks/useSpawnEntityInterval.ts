@@ -11,7 +11,7 @@ const useSpawnEntityInterval = (
   useFrame(() => {
     const randomNumber = Math.random();
     const id = getDeadEntityId(entityAttributes);
-    if (randomNumber > 0.1 || id === null) return; 
+    if (randomNumber > 0.5 || id === null) return; 
 
     const startPos = getSpawnCoordinate(
       entity.size,

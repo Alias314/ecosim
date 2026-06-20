@@ -1,6 +1,10 @@
 import { MathUtils, Vector3 } from "three";
 
-export const getRandomNumberAtRange = (min, max) => {
+export const getRandomIntAtRange = (min, max) => {
+  return MathUtils.randInt(min, max);
+};
+
+export const getRandomFloatAtRange = (min, max) => {
   return MathUtils.randFloat(min, max);
 };
 

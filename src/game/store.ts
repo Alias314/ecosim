@@ -42,10 +42,10 @@ export const useGameStore = create<GameState>((set) => ({
     simulationSpeed: 1,
     preySpeed: 6,
     predatorSpeed: 6,
-    preyCount: 300,
+    preyCount: 100,
     predatorCount: 10,
     plantCount: 200,
-    plantSpawnRate: 50,
+    plantSpawnRate: 100,
     populationHistory: [],
 
     setValue: (key, value) => set((state) => ({

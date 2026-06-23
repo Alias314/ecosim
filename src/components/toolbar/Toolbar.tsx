@@ -102,7 +102,7 @@ export default function ToolBar({ onSpawn, onRegenerateTerrain }) {
             label="Plant Spawn Rate"
             value={plantSpawnRate}
             min={0}
-            max={100}
+            max={200}
             step={1}
             onChange={(v) => setValue("plantSpawnRate", v)}
           />
